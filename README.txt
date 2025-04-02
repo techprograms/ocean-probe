@@ -51,7 +51,7 @@ ocean probe navigating the seabed. The probe can:
     "commands": "FFRFF"
   }
 - Response:
-  "(4,2) facing EAST"
+  "(4,0) facing EAST"
 
 - Command List:
   - F → Move forward
@@ -66,7 +66,7 @@ ocean probe navigating the seabed. The probe can:
 - URL: /api/probe/visited
 - Method: GET
 - Response:
-  ["2,2", "2,1", "3,1", "4,1", "4,2"]
+  ["2,2", "2,1", "2,0", "3,0", "4,0"]
 
 =================================================================
 
@@ -105,18 +105,10 @@ $ mvn test
 
 =================================================================
 
-6. FUTURE ENHANCEMENTS
-----------------------
-- 🌍 Persistent Storage - Save probe history
-- 📡 WebSocket Integration - Real-time control
-- 📍 Advanced Obstacles - Variable terrain simulation
-
-=================================================================
-
-7. AUTHOR & CONTACT
+6. AUTHOR & CONTACT
 -------------------
-🚀 Your Name
-📧 Email: your.email@example.com
+🚀 Name: Ganesh Prasad Rai
+📧 Email: tech.gpr@gmail.com
 💻 GitHub: https://github.com/techprograms/ocean-probe
 
 =================================================================

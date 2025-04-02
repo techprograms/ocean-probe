@@ -1,0 +1,54 @@
+{
+	"info": {
+		"_postman_id": "20859415-5bb6-4c1d-b2f7-20949ee77b99",
+		"name": "probe_test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "10460372"
+	},
+	"item": [
+		{
+			"name": "probe_visited",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "probe_initialize",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"x\": 2,\r\n  \"y\": 2,\r\n  \"direction\": \"NORTH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/probe/initialize"
+			},
+			"response": []
+		},
+		{
+			"name": "probe_movement",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"commands\": \"FFRFF\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/probe/move"
+			},
+			"response": []
+		}
+	]
+}
