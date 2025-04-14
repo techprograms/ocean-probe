@@ -97,18 +97,18 @@ $ mvn test
 
 5. DESIGN CONSIDERATIONS
 -------------------------
-✅ Clean Architecture - Follows domain-driven design principles
-✅ Single Responsibility Principle (SRP) - Separate concerns for maintainability
-✅ Encapsulation - Grid, Probe, and Movement logic are independent
-✅ Test-Driven Development (TDD) - Unit tests ensure correctness
-✅ Scalability - Can extend with additional sensors or commands
+1. Clean Architecture - Follows domain-driven design principles
+2. Single Responsibility Principle (SRP) - Separate concerns for maintainability
+3. Encapsulation - Grid, Probe, and Movement logic are independent
+4. Test-Driven Development (TDD) - Unit tests ensure correctness
+5. Scalability - Can extend with additional sensors or commands
 
 =================================================================
 
 6. AUTHOR & CONTACT
 -------------------
-🚀 Name: Ganesh Prasad Rai
-📧 Email: tech.gpr@gmail.com
-💻 GitHub: https://github.com/techprograms/ocean-probe
+ Name: Ganesh Prasad Rai
+ Email: tech.gpr@gmail.com
+ GitHub: https://github.com/techprograms/ocean-probe
 
 =================================================================
