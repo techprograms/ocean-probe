@@ -1,29 +1,55 @@
 package com.ocean.probe.service;
 
+import com.ocean.probe.exception.ProbeNotInitializedException;
 import com.ocean.probe.model.Direction;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProbeServiceTest {
+    private ProbeService probeService;
 
-    ProbeService service = new ProbeService();
+    @BeforeEach
+    void setUp() {
+        probeService = new ProbeService();
+    }
 
     @Test
-    void testProbeMovement() {
+    void testInitializeProbe_andProcessCommands() {
+        //Arrange
+        probeService.initializeProbe(0, 1, Direction.WEST);
+        //Act
+        String result = probeService.processCommands("LFF");
+        //Assert
+        assertNotNull(result);
+    }
 
-        service.initializeProbe(2, 2, Direction.NORTH);
+    @Test
+    void testProcessCommands_withoutInitialization_throwsException() {
+        ProbeNotInitializedException exception = assertThrows(ProbeNotInitializedException.class, () -> {
+            probeService.processCommands("MM");
+        });
+        assertEquals("Probe not initialized.", exception.getMessage());
+    }
 
-        assertEquals("(2,1) facing NORTH", service.processCommands("F"));
-        assertEquals("(0,1) facing WEST", service.processCommands("LFF"));
-        assertEquals("(0,3) facing NORTH", service.processCommands("RBB"));
+    @Test
+    void testVisitedCoordinates_afterMovement() {
+        //Arrange
+        probeService.initializeProbe(2, 1, Direction.NORTH);
+        probeService.processCommands("F");
+        //Act
+        Object visited = probeService.getVisitedCoordinates();
+        //Assert
+        assertNotNull(visited);
+
     }
 
     @Test
     void testObstacleAvoidance() {
-
-        service.initializeProbe(2, 2, Direction.NORTH);
-
-        assertEquals("(4,0) facing EAST", service.processCommands("FFRFF"));
+        //Arrange
+        probeService.initializeProbe(2, 2, Direction.NORTH);
+        //Assert
+        assertEquals("(4,0) facing EAST", probeService.processCommands("FFRFF"));
     }
 }

@@ -41,7 +41,7 @@ public class Probe {
         }
 
         if (!grid.isWithinBounds(newX, newY) || grid.isObstacle(newX, newY)) {
-            return; // Ignore move if out of bounds or obstacle
+            return;
         }
 
         x = newX;

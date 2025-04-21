@@ -1,5 +1,6 @@
 package com.ocean.probe.service;
 
+import com.ocean.probe.exception.ProbeNotInitializedException;
 import com.ocean.probe.model.Direction;
 import com.ocean.probe.model.Grid;
 import com.ocean.probe.model.Probe;
@@ -21,7 +22,7 @@ public class ProbeService {
 
     public String processCommands(String commands) {
         if (probe == null) {
-            throw new IllegalStateException("Probe not initialized.");
+            throw new ProbeNotInitializedException("Probe not initialized.");
         }
         probe.executeCommands(commands);
         return probe.getCurrentPosition();
