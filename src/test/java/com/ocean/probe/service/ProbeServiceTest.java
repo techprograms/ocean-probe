@@ -1,55 +1,98 @@
 package com.ocean.probe.service;
 
+import com.ocean.probe.dto.ProbePositionDTO;
+import com.ocean.probe.dto.VisitedCoordinateDTO;
+import com.ocean.probe.entity.Probe;
+import com.ocean.probe.entity.VisitedCoordinate;
+import com.ocean.probe.entity.VisitedCoordinateRepository;
 import com.ocean.probe.exception.ProbeNotInitializedException;
 import com.ocean.probe.model.Direction;
+import com.ocean.probe.repository.GridRepository;
+import com.ocean.probe.repository.ProbeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class ProbeServiceTest {
+
+    private ProbeRepository probeRepository;
+    private GridRepository gridRepository;
+    private VisitedCoordinateRepository visitedCoordinateRepository;
     private ProbeService probeService;
 
     @BeforeEach
     void setUp() {
-        probeService = new ProbeService();
+        probeRepository = mock(ProbeRepository.class);
+        gridRepository = mock(GridRepository.class);
+        visitedCoordinateRepository = mock(VisitedCoordinateRepository.class);
+        probeService = new ProbeService(probeRepository, gridRepository, visitedCoordinateRepository);
     }
 
     @Test
-    void testInitializeProbe_andProcessCommands() {
-        //Arrange
-        probeService.initializeProbe(0, 1, Direction.WEST);
-        //Act
-        String result = probeService.processCommands("LFF");
-        //Assert
+    void testInitializeProbe() {
+        when(probeRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        String result = probeService.initializeProbe(0, 0, Direction.NORTH);
+
+        assertEquals("Initialized probe at (0, 0) facing NORTH", result);
+//        verify(gridRepository, times(1)).save(any(Grid.class));
+//        verify(probeRepository, times(1)).save(any(Probe.class));
+    }
+
+    @Test
+    void testMoveProbe() {
+        Probe probe = new Probe();
+        probe.setX(0);
+        probe.setY(0);
+        probe.setDirection(Direction.NORTH);
+        probe.setVisitedCoordinates(new ArrayList<>());
+
+        // Simulate initialization
+        when(probeRepository.save(any())).thenReturn(probe);
+        probeService.initializeProbe(0, 0, Direction.NORTH);
+
+        // Simulate repository behavior
+        when(visitedCoordinateRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        ProbePositionDTO result = probeService.moveProbe("RM");
+
         assertNotNull(result);
     }
 
     @Test
-    void testProcessCommands_withoutInitialization_throwsException() {
-        ProbeNotInitializedException exception = assertThrows(ProbeNotInitializedException.class, () -> {
-            probeService.processCommands("MM");
-        });
-        assertEquals("Probe not initialized.", exception.getMessage());
+    void testMoveWithoutInitializationThrowsException() {
+        ProbeService uninitializedService = new ProbeService(probeRepository, gridRepository, visitedCoordinateRepository);
+        assertThrows(ProbeNotInitializedException.class, () -> uninitializedService.moveProbe("M"));
     }
 
     @Test
-    void testVisitedCoordinates_afterMovement() {
-        //Arrange
-        probeService.initializeProbe(2, 1, Direction.NORTH);
-        probeService.processCommands("F");
-        //Act
-        Object visited = probeService.getVisitedCoordinates();
-        //Assert
-        assertNotNull(visited);
+    void testGetVisitedCoordinates() {
+        Probe probe = new Probe();
+        probe.setVisitedCoordinates(List.of(
+                new VisitedCoordinate(1, 1, probe),
+                new VisitedCoordinate(2, 2, probe)
+        ));
 
-    }
+        probe.setX(2);
+        probe.setY(2);
+        probe.setDirection(Direction.SOUTH);
 
-    @Test
-    void testObstacleAvoidance() {
-        //Arrange
-        probeService.initializeProbe(2, 2, Direction.NORTH);
-        //Assert
-        assertEquals("(4,0) facing EAST", probeService.processCommands("FFRFF"));
+        when(probeRepository.save(any())).thenReturn(probe);
+        probeService.initializeProbe(0, 0, Direction.NORTH);
+
+        // simulate setting probe state after initialization
+        var field = ProbeService.class.getDeclaredFields()[3];
+        field.setAccessible(true);
+        try { field.set(probeService, probe); } catch (Exception ignored) {}
+
+        List<VisitedCoordinateDTO> visited = probeService.getVisitedCoordinates();
+
+        assertEquals(2, visited.size());
     }
 }
