@@ -70,7 +70,7 @@ public class ProbeService {
 
     public List<VisitedCoordinateDTO> getVisitedCoordinates() {
         return probe.getVisitedCoordinates().stream()
-                .map(coord -> new VisitedCoordinateDTO(coord.getX(), coord.getY()))
+                .map(coordinate -> new VisitedCoordinateDTO(coordinate.getX(), coordinate.getY()))
                 .collect(Collectors.toList());
     }
 
