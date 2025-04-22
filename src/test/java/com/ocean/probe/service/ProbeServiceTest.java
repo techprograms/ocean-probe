@@ -2,9 +2,10 @@ package com.ocean.probe.service;
 
 import com.ocean.probe.dto.ProbePositionDTO;
 import com.ocean.probe.dto.VisitedCoordinateDTO;
+import com.ocean.probe.entity.Grid;
 import com.ocean.probe.entity.Probe;
 import com.ocean.probe.entity.VisitedCoordinate;
-import com.ocean.probe.entity.VisitedCoordinateRepository;
+import com.ocean.probe.repository.VisitedCoordinateRepository;
 import com.ocean.probe.exception.ProbeNotInitializedException;
 import com.ocean.probe.model.Direction;
 import com.ocean.probe.repository.GridRepository;
@@ -41,8 +42,8 @@ class ProbeServiceTest {
         String result = probeService.initializeProbe(0, 0, Direction.NORTH);
 
         assertEquals("Initialized probe at (0, 0) facing NORTH", result);
-//        verify(gridRepository, times(1)).save(any(Grid.class));
-//        verify(probeRepository, times(1)).save(any(Probe.class));
+        verify(gridRepository, times(1)).save(any(Grid.class));
+        verify(probeRepository, times(1)).save(any(Probe.class));
     }
 
     @Test
@@ -94,5 +95,7 @@ class ProbeServiceTest {
         List<VisitedCoordinateDTO> visited = probeService.getVisitedCoordinates();
 
         assertEquals(2, visited.size());
+        assertTrue(visited.stream().anyMatch(c -> c.getX() == 1 && c.getY() == 1));
+        assertTrue(visited.stream().anyMatch(c -> c.getX() == 2 && c.getY() == 2));
     }
 }

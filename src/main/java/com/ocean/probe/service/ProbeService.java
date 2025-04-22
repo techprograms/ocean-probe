@@ -5,7 +5,7 @@ import com.ocean.probe.dto.VisitedCoordinateDTO;
 import com.ocean.probe.entity.Grid;
 import com.ocean.probe.entity.Probe;
 import com.ocean.probe.entity.VisitedCoordinate;
-import com.ocean.probe.entity.VisitedCoordinateRepository;
+import com.ocean.probe.repository.VisitedCoordinateRepository;
 import com.ocean.probe.exception.ProbeNotInitializedException;
 import com.ocean.probe.model.Direction;
 import com.ocean.probe.repository.GridRepository;
@@ -102,13 +102,13 @@ public class ProbeService {
             case WEST -> x--;
         }
 
-        VisitedCoordinate coord = new VisitedCoordinate();
-        coord.setX(x);
-        coord.setY(y);
-        coord.setProbe(probe);
+        VisitedCoordinate coordinate = new VisitedCoordinate();
+        coordinate.setX(x);
+        coordinate.setY(y);
+        coordinate.setProbe(probe);
 
-        visitedCoordinateRepository.save(coord);
-        probe.getVisitedCoordinates().add(coord);
+        visitedCoordinateRepository.save(coordinate);
+        probe.getVisitedCoordinates().add(coordinate);
         probe.setX(x);
         probe.setY(y);
     }
